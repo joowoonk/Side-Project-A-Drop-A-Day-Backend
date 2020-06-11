@@ -4,6 +4,13 @@ exports.up = function (knex) {
 
     users.string("subject", 255).notNullable().unique();
     users.integer("tomatoes", 24).notNullable();
+    users
+      .integer("user_id")
+      .notNullable()
+      .references("id")
+      .inTable("spotifytable")
+      .onDelete("RESTRICT")
+      .onUpdate("CASCADE");
   });
 };
 
