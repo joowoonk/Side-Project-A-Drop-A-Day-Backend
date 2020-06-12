@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+// const secrets  = require("../../auth/secrets");
 exports.seed = function (knex) {
   // 000-cleanup.js already cleaned out all tables
 
@@ -9,19 +10,19 @@ exports.seed = function (knex) {
     },
     {
       username: "admin",
-      password: bcrypt.hashSync("secretToMyGrave", 10),
+      password: "123123123",
     },
     {
       username: "David",
-      password: bcrypt.hashSync("secretToMyGrave", 10),
+      password: "123123123",
     },
     {
       username: "Luis",
-      password: bcrypt.hashSync("secretToMyGrave", 10),
+      password: "123123123",
     },
     {
       username: "lambda",
-      password: bcrypt.hashSync("secretToMyGrave", 10),
+      password: "123123123",
     },
   ];
 

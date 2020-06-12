@@ -6,9 +6,10 @@ exports.up = function (knex) {
     users.integer("tomatoes", 24).notNullable();
     users
       .integer("user_id")
+      .unsigned()
       .notNullable()
       .references("id")
-      .inTable("spotifytable")
+      .inTable("users")
       .onDelete("RESTRICT")
       .onUpdate("CASCADE");
   });
