@@ -6,14 +6,14 @@ const authenticate = require("../auth/authenticate-middleware");
 
 // const router = require("express").Router();
 
-router.get("/", authenticate, (req, res) => {
+router.get("/", (req, res) => {
   getIDbyusername(req.headers.authorization).then((id) => {
     db("subjects")
       .where({ user_id: id })
       // .join("users", function () {
       //   this.on("users.id", "=", "subjects.user_id");
       // })
-      .select("subject", "tomatoes")
+      .select("subject", "tomatoes", "id", "finished")
       .orderBy("subjects.id")
       .then((data) => {
         res.status(200).json(data);

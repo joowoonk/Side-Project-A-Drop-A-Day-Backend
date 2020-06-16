@@ -7,16 +7,19 @@ exports.seed = function (knex) {
       subject: "Practice Reading English",
       tomatoes: 6,
       user_id: 1,
+      finished: 0,
     },
     {
       subject: "Solve Leetcode problems",
       tomatoes: 8,
       user_id: 1,
+      finished: 0,
     },
     {
       subject: "Working on side project",
       tomatoes: 8,
       user_id: 1,
+      finished: 0,
     },
   ];
 
