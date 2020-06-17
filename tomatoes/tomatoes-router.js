@@ -20,17 +20,35 @@ router.get("/", (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        res.status({ message: "Error retrieving liked songs" });
+        res.status({ message: "Error retrieving projects" });
       });
   });
 });
+
 router.put("/project/:id", (req, res) => {
   const { id } = req.params;
-  findById(id)
+  findProjectId(id)
     .then((sub) => {
       if (sub) {
         addingFinished(id).then((finished) => {
           res.status(202).json({ message: "incremented" });
+        });
+      } else {
+        res.status(404).json({ message: "Couldnt find project with given id" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Failed to retrieve" });
+    });
+});
+
+router.put("/reset/:id", (req, res) => {
+  const { id } = req.params;
+  findProjectId(id)
+    .then((sub) => {
+      if (sub) {
+        resetFinished(id).then((finished) => {
+          res.status(202).json({ message: "reset" });
         });
       } else {
         res.status(404).json({ message: "Couldnt find project with given id" });
@@ -111,6 +129,13 @@ function addingFinished(id) {
 //   .where('userid', '=', 1)
 //   .increment('balance', 10)
 
+function resetFinished(id) {
+  console.log(id);
+  return db("projects").where("projects.id", "=", id).update("finished", 0);
+}
+// UPDATE projects
+// SET finished = 0
+// WHERE projects.id = 3
 function updateSubFinished(id) {
   let incrementFinished =
     "UPDATE projects SET finished += 1 WHERE user_id = id";
