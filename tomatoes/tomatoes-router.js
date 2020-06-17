@@ -8,13 +8,13 @@ const authenticate = require("../auth/authenticate-middleware");
 
 router.get("/", (req, res) => {
   getIDbyusername(req.headers.authorization).then((id) => {
-    db("subjects")
+    db("projects")
       .where({ user_id: id })
       // .join("users", function () {
-      //   this.on("users.id", "=", "subjects.user_id");
+      //   this.on("users.id", "=", "projects.user_id");
       // })
-      .select("subject", "tomatoes", "id", "finished")
-      .orderBy("subjects.id")
+      .select("project", "tomatoes", "id", "finished")
+      .orderBy("projects.id")
       .then((data) => {
         res.status(200).json(data);
       })
@@ -24,23 +24,39 @@ router.get("/", (req, res) => {
       });
   });
 });
+router.put("/project/:id", (req, res) => {
+  const { id } = req.params;
+  findById(id)
+    .then((sub) => {
+      if (sub) {
+        addingFinished(id).then((finished) => {
+          res.status(202).json({ message: "incremented" });
+        });
+      } else {
+        res.status(404).json({ message: "Couldnt find project with given id" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Failed to retrieve" });
+    });
+});
 
-router.post("/:id/subject", (req, res) => {
-  const bodySubject = req.body;
+router.post("/project/:id", (req, res) => {
+  const bodyproject = req.body;
   const { id } = req.params;
 
   findById(id)
     .then((sub) => {
       if (sub) {
-        addSubject(bodySubject, id).then((topic) => {
-          res.status(201).json(bodySubject);
+        addProject(bodyproject, id).then((topic) => {
+          res.status(201).json(bodyproject);
         });
       } else {
         res.status(404).json({ message: "Could not find topic with given id" });
       }
     })
     .catch((err) => {
-      res.status(500).json({ message: "Failed to create new subject" });
+      res.status(500).json({ message: "Failed to create new project" });
     });
 });
 
@@ -50,16 +66,27 @@ function findById(id) {
   return db("users").where({ id }).first();
 }
 
-function addSubject(subjectBody, id) {
-  return db("subjects")
-    .insert(subjectBody, id)
+function addProject(projectBody, id) {
+  return db("projects")
+    .insert(projectBody, id)
     .then((ids) => {
-      return findSubjectId(subjectBody.user_id);
+      return findProjectId(projectBody.user_id);
     });
 }
 
-function findSubjectId(id) {
-  return db("subjects");
+function findProjectId(id) {
+  return db("projects");
+}
+
+function getIDbyusername(token) {
+  const { username } = jwt.verify(token, secrets.secret);
+  return db("Users")
+    .select("id")
+    .where({ username: username })
+    .first()
+    .then(({ id }) => {
+      return id;
+    });
 }
 
 function getIDbyusername(token) {
@@ -72,14 +99,19 @@ function getIDbyusername(token) {
       return id;
     });
 }
+function addingFinished(id) {
+  console.log(id);
+  return db("projects").where("projects.id", "=", id).increment("finished", 1);
+}
+//   UPDATE projects
+// SET finished = finished + 1
+// where projects.id is 8
 
-function getIDbyusername(token) {
-  const { username } = jwt.verify(token, secrets.secret);
-  return db("Users")
-    .select("id")
-    .where({ username: username })
-    .first()
-    .then(({ id }) => {
-      return id;
-    });
+// knex('accounts')
+//   .where('userid', '=', 1)
+//   .increment('balance', 10)
+
+function updateSubFinished(id) {
+  let incrementFinished =
+    "UPDATE projects SET finished += 1 WHERE user_id = id";
 }

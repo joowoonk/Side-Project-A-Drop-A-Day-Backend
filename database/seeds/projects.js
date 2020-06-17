@@ -4,24 +4,24 @@ exports.seed = function (knex) {
 
   const tomatoes = [
     {
-      subject: "Practice Reading English",
+      project: "Practice Reading English",
       tomatoes: 6,
       user_id: 1,
       finished: 0,
     },
     {
-      subject: "Solve Leetcode problems",
+      project: "Solve Leetcode problems",
       tomatoes: 8,
       user_id: 1,
       finished: 0,
     },
     {
-      subject: "Working on side project",
+      project: "Working on side project",
       tomatoes: 8,
       user_id: 1,
       finished: 0,
     },
   ];
 
-  return knex("subjects").insert(tomatoes);
+  return knex("projects").insert(tomatoes);
 };
