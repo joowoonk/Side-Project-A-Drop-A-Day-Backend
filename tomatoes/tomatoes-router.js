@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
 
 router.put("/project/:id", (req, res) => {
   const { id } = req.params;
-  findProjectId(id)
+  findProject(id)
     .then((sub) => {
       if (sub) {
         addingFinished(id).then((finished) => {
@@ -41,10 +41,30 @@ router.put("/project/:id", (req, res) => {
       res.status(500).json({ message: "Failed to retrieve" });
     });
 });
+router.delete("/project/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  findProject(id)
+    .then((sub) => {
+      if (sub) {
+        console.log("yes?");
+        deleteTomatoes(id).then((del) => {
+          res.status(205).json({ message: "deleted" });
+        });
+      } else {
+        res
+          .status(404)
+          .json({ message: "Couldnt find the project with that given id" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Something went wrong with server" });
+    });
+});
 
 router.put("/reset/:id", (req, res) => {
   const { id } = req.params;
-  findProjectId(id)
+  findProjectId({ id })
     .then((sub) => {
       if (sub) {
         resetFinished(id).then((finished) => {
@@ -88,12 +108,15 @@ function addProject(projectBody, id) {
   return db("projects")
     .insert(projectBody, id)
     .then((ids) => {
-      return findProjectId(projectBody.user_id);
+      return findProject(projectBody.user_id);
     });
 }
 
-function findProjectId(id) {
+function findProject(id) {
   return db("projects");
+}
+function findProjectId(id) {
+  return db("projects").where(id).first();
 }
 
 function getIDbyusername(token) {
@@ -132,6 +155,10 @@ function addingFinished(id) {
 function resetFinished(id) {
   console.log(id);
   return db("projects").where("projects.id", "=", id).update("finished", 0);
+}
+function deleteTomatoes(id) {
+  console.log(id);
+  return db("projects").where("projects.id", "=", id).delete();
 }
 // UPDATE projects
 // SET finished = 0

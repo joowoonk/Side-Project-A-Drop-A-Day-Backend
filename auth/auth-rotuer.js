@@ -23,6 +23,7 @@ router.get("/user", (req, res) => {
       //   this.on("users.id", "=", "projects.user_id");
       // })
       .select("username", "id")
+      .first()
       .then((data) => {
         res.status(200).json(data);
       })
