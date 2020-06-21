@@ -60,31 +60,23 @@ router.post("/register", (req, res) => {
   }
 });
 
-router.post("/login", (req, res) => {
-  const { username, password, role } = req.body;
-
-  if (isValid(req.body)) {
-    Users.findBy({ "u.username": username })
-      .then(([user]) => {
-        if (user && bcryptjs.compareSync(password, user.password)) {
-          const token = generateToken(user);
-          // id:user.id on 55 makes sure front-end to have user.id
-          res
-            .status(200)
-            .json({ message: `Welcome ${user.username}`, id: user.id, token });
-        } else {
-          res.status(401).json({ message: "Invalid credentials" });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({ message: error.message });
-      });
-  } else {
-    res.status(400).json({
-      message:
-        "please provide username and password and the passwrod should be alphanuemric",
+router.post("/login", userValidation, (req, res) => {
+  const { username, password } = req.body;
+  db("users")
+    .select("*")
+    .where({ username })
+    .then(([user]) => {
+      if (user && bcryptjs.compareSync(password, user.password)) {
+        const token = generateToken(user);
+        res.status(201).json({ msg: "Authorized", token });
+      } else {
+        res.status(401).json({ message: "Not authorized" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err });
     });
-  }
 });
 
 function generateToken(user) {
@@ -109,3 +101,12 @@ function getIDbyusername(token) {
 }
 
 module.exports = router;
+
+function userValidation(req, res, next) {
+  if (!req.body.username || !req.body.password) {
+    res.status(403).send({
+      message: "Please make sure to provide both username and password",
+    });
+  }
+  next();
+}
