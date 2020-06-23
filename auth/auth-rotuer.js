@@ -63,7 +63,7 @@ router.post("/register", (req, res) => {
 router.post("/login", userValidation, (req, res) => {
   const { username, password } = req.body;
   db("users")
-    .select("*")
+    .select("username")
     .where({ username })
     .then(([user]) => {
       if (user && bcryptjs.compareSync(password, user.password)) {
