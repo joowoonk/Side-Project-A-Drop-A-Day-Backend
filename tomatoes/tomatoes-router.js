@@ -123,7 +123,7 @@ function addProject(projectBody, id) {
     .insert(projectBody, id)
     .then((ids) => {
       //something is wrong here
-      // return findProject(projectBody.user_id);
+      return findProject(projectBody.user_id);
     });
 }
 
