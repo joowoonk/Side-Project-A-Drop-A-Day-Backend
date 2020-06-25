@@ -7,13 +7,13 @@ exports.up = function (knex) {
       users.string("password", 255).notNullable();
     })
 
-    .createTable("projects", (users) => {
-      users.increments();
+    .createTable("projects", (projects) => {
+      projects.increments();
 
-      users.string("project", 255).notNullable();
-      users.integer("tomatoes", 24).notNullable();
-      users.integer("finished", 24).notNullable();
-      users
+      projects.string("project", 255).notNullable();
+      projects.integer("tomatoes", 24).notNullable();
+      projects.integer("finished", 24).notNullable();
+      projects
         .integer("user_id")
         .unsigned()
         .notNullable()
