@@ -7,22 +7,36 @@ const authenticate = require("../auth/authenticate-middleware");
 // const router = require("express").Router();
 
 router.get("/", (req, res) => {
-  getIDbyusername(req.headers.authorization).then((id) => {
-    db("projects")
-      .where({ user_id: id })
-      // .join("users", function () {
-      //   this.on("users.id", "=", "projects.user_id");
-      // })
-      .select("project", "tomatoes", "id", "finished")
-      .orderBy("projects.id")
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status({ message: "Error retrieving projects" });
-      });
-  });
+  db("projects")
+    .orderBy("projects.id")
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status({ message: "Error retrieving projects" });
+    });
+});
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+
+  db("users")
+    .where({ user_id: id })
+    .select(
+      "projects.project",
+      "projects.tomatoes",
+      "projects.finished",
+      "projects.id",
+      "users.id as user_id"
+    )
+    .join("projects", { "projects.user_id": "users.id" })
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status({ message: "Error retrieving projects" });
+    });
 });
 
 router.put("/project/:id", (req, res) => {
@@ -108,7 +122,8 @@ function addProject(projectBody, id) {
   return db("projects")
     .insert(projectBody, id)
     .then((ids) => {
-      return findProject(projectBody.user_id);
+      //something is wrong here
+      // return findProject(projectBody.user_id);
     });
 }
 

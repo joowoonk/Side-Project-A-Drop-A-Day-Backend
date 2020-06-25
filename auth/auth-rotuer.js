@@ -7,31 +7,35 @@ const db = require("../database/dbConfig");
 const Users = require("./auth-model");
 const { isValid } = require("./auth-service");
 
-router.get("/", (req, res) => {
-  Users.find()
-    .then((users) => {
-      res.status(200).json({ users, jwt: req.jwt });
+router.get("/user", (req, res) => {
+  // const { id } = req.params;
+  db("users")
+    .select("*")
+    .then((user) => {
+      console.log("yes");
+      res.status(200).json(user);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => {
+      console.log(err);
+      console.log("no");
+      res.status(500).json({ message: "Error retrieving user" });
+    });
 });
 
-router.get("/user", (req, res) => {
-  getIDbyusername(req.headers.authorization).then((id) => {
-    db("users")
-      .where({ id })
-      // .join("users", function () {
-      //   this.on("users.id", "=", "projects.user_id");
-      // })
-      .select("username", "id")
-      .first()
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status({ message: "Error retrieving user info" });
-      });
-  });
+router.get("/:id/user", (req, res) => {
+  const { id } = req.params;
+  db("users")
+    .select("username", "id")
+    .where({ id })
+    .then((user) => {
+      console.log("yes");
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log("no");
+      res.status(500).json({ message: "Error retrieving user" });
+    });
 });
 
 router.post("/register", (req, res) => {
@@ -68,7 +72,7 @@ router.post("/login", userValidation, (req, res) => {
     .then(([user]) => {
       if (user && bcryptjs.compareSync(password, user.password)) {
         const token = generateToken(user);
-        res.status(201).json({ msg: "Authorized", token });
+        res.status(201).json({ msg: "Authorized", token, id: user.id });
       } else {
         res.status(401).json({ message: "Not authorized" });
       }
@@ -91,13 +95,10 @@ function generateToken(user) {
 
 function getIDbyusername(token) {
   const { username } = jwt.verify(token, secrets.secret);
-  return db("Users")
-    .select("id")
-    .where({ username: username })
-    .first()
-    .then(({ id }) => {
-      return id;
-    });
+  return db("Users").select("id").first();
+  // .then(({ id }) => {
+  //   return id;
+  // });
 }
 
 module.exports = router;
