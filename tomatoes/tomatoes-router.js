@@ -181,11 +181,14 @@ function addingFinished(id) {
 
 function resetFinished(id) {
   console.log(id);
-  return db("projects").where("projects.id", "=", id).update("finished", 0);
+  return db("projects")
+    .where("projects.id", "=", id)
+    .update("finished", 0)
+    .orderBy(id);
 }
 function deleteTomatoes(id) {
   console.log(id);
-  return db("projects").where("projects.id", "=", id).delete();
+  return db("projects").where("projects.id", "=", id).delete().orderBy(id);
 }
 // UPDATE projects
 // SET finished = 0
