@@ -11,6 +11,7 @@ router.get("/user", (req, res) => {
   // const { id } = req.params;
   db("users")
     .select("*")
+    .orderBy("users.id")
     .then((user) => {
       console.log("yes");
       res.status(200).json(user);
@@ -27,6 +28,7 @@ router.get("/:id/user", (req, res) => {
   db("users")
     .select("username", "id")
     .where({ id })
+    .orderBy("users.id")
     .then((user) => {
       console.log("yes");
       res.status(200).json(user);
