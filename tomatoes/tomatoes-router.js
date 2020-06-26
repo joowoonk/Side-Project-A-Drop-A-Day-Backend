@@ -97,7 +97,7 @@ router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   const { id } = req.params;
 
-  findById(bodyproject)
+  findById(bodyproject.user_id)
     .then((sub) => {
       console.log({ sub });
       if (sub) {
