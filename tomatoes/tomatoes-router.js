@@ -95,11 +95,10 @@ router.put("/reset/:id", (req, res) => {
 
 router.post("/project/", (req, res) => {
   const bodyproject = req.body;
-  const { id } = req.params;
+  // const { id } = req.params;
 
   findById(bodyproject.user_id)
     .then((sub) => {
-      console.log({ sub });
       if (sub) {
         addProject(bodyproject, sub.id).then((topic) => {
           res.status(201).json(bodyproject);
