@@ -100,7 +100,7 @@ router.post("/project/", (req, res) => {
   findById(bodyproject)
     .then((sub) => {
       if (sub) {
-        addProject(bodyproject, bodyproject.user_id).then((topic) => {
+        addProject(bodyproject, sub.id).then((topic) => {
           res.status(201).json(bodyproject);
         });
       } else {
