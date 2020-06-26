@@ -29,6 +29,7 @@ router.get("/:id", (req, res) => {
       "projects.id",
       "users.id as user_id"
     )
+    .orderBy("projects.id")
     .join("projects", { "projects.user_id": "users.id" })
     .then((data) => {
       res.status(200).json(data);
