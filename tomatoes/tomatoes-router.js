@@ -93,7 +93,7 @@ router.put("/reset/:id", (req, res) => {
     });
 });
 
-router.post("/project/:id", (req, res) => {
+router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   const { id } = req.params;
 
