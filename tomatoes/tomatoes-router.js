@@ -97,10 +97,10 @@ router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   const { id } = req.params;
 
-  findById(id)
+  findById(bodyproject.user_id)
     .then((sub) => {
       if (sub) {
-        addProject(bodyproject, id).then((topic) => {
+        addProject(bodyproject, bodyproject.user_id).then((topic) => {
           res.status(201).json(bodyproject);
         });
       } else {
