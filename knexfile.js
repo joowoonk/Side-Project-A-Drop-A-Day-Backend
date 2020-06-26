@@ -78,13 +78,11 @@ module.exports = {
     },
   },
   production: {
-    client: "sqlite3",
-    connection: {
-      filename: "./database/auth.db3",
-    },
+    client: "pg",
+    connection: "postgresql://localhost",
     pool: {
       min: 2,
-      max: 2000,
+      max: 10,
     },
     migrations: {
       directory: "./database/migrations",
