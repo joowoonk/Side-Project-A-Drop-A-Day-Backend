@@ -119,12 +119,24 @@ function findById(id) {
 }
 
 function addProject(projectBody, id) {
+  const anotherProject = {
+    project: projectBody.project,
+    tomatoes: projectBody.tomatoes,
+    finished: projectBody.finished,
+    user_id: id,
+  };
   return db("projects")
-    .insert(projectBody, id)
-    .then((ids) => {
-      //something is wrong here
-      return findProject(projectBody.user_id);
+    .insert(anotherProject, id)
+    .then((id) => {
+      return findProject(anotherProject.user_id);
     });
+
+  // return db("projects")
+  //   .insert(projectBody, id)
+  //   .then((ids) => {
+  //     //something is wrong here
+  //     return findProject(projectBody.user_id);
+  //   });
 }
 
 function findProject(id) {
