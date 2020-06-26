@@ -99,6 +99,7 @@ router.post("/project/", (req, res) => {
 
   findById(bodyproject)
     .then((sub) => {
+      console.log({ sub });
       if (sub) {
         addProject(bodyproject, sub.id).then((topic) => {
           res.status(201).json(bodyproject);
