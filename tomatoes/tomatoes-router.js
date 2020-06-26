@@ -97,7 +97,7 @@ router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   const { id } = req.params;
 
-  findById(bodyproject.user_id)
+  findById(bodyproject)
     .then((sub) => {
       if (sub) {
         addProject(bodyproject, bodyproject.user_id).then((topic) => {
