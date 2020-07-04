@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const secrets = require("../auth/secrets");
 const db = require("../database/dbConfig");
 const authenticate = require("../auth/authenticate-middleware");
+var cron = require("node-cron");
 
 // const router = require("express").Router();
 
@@ -112,6 +113,29 @@ router.post("/project/", (req, res) => {
       res.status(500).json({ message: "Failed to create new project" });
     });
 });
+
+cron.schedule(
+  "0 0 * * *",
+  () => {
+    const reset = () => {
+      db("projects")
+        .update("finished", 0)
+        .then((reset) => {
+          console.log("ALL THE FINISHED COUNTS ARE RESET!");
+        })
+        .catch((err) => {
+          // res.status(500).json({ message: "failed to rest every project" });
+        });
+    };
+    reset();
+  },
+  {
+    scheduled: true,
+    timezone: "America/Los_Angeles",
+  }
+);
+
+//UPDATE projects SET finished = 0;
 
 module.exports = router;
 
