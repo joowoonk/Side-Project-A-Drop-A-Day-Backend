@@ -134,18 +134,18 @@ router.post("/project/", (req, res) => {
 //     timezone: "America/Los_Angeles",
 //   }
 // );
+const reset = () => {
+  db("projects")
+    .update("finished", 0)
+    .then((reset) => {
+      console.log("ALL THE FINISHED COUNTS ARE RESET!");
+    })
+    .catch((err) => {
+      // res.status(500).json({ message: "failed to rest every project" });
+    });
+};
 
 cron.schedule("* * * * *", () => {
-  const reset = () => {
-    db("projects")
-      .update("finished", 0)
-      .then((reset) => {
-        console.log("ALL THE FINISHED COUNTS ARE RESET!");
-      })
-      .catch((err) => {
-        // res.status(500).json({ message: "failed to rest every project" });
-      });
-  };
   reset();
 });
 
