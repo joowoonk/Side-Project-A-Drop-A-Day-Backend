@@ -124,26 +124,19 @@ const reset = () => {
       // res.status(500).json({ message: "failed to rest every project" });
     });
 };
-cron.schedule(
-  "0 0 * * *",
-  () => {
-    // const reset = () => {
-    //   db("projects")
-    //     .update("finished", 0)
-    //     .then((reset) => {
-    //       console.log("ALL THE FINISHED COUNTS ARE RESET!");
-    //     })
-    //     .catch((err) => {
-    //       // res.status(500).json({ message: "failed to rest every project" });
-    //     });
-    // };
-    reset();
-  },
-  {
-    scheduled: true,
-    timezone: "America/Los_Angeles",
-  }
-);
+cron.schedule("15 0 * * *", () => {
+  // const reset = () => {
+  //   db("projects")
+  //     .update("finished", 0)
+  //     .then((reset) => {
+  //       console.log("ALL THE FINISHED COUNTS ARE RESET!");
+  //     })
+  //     .catch((err) => {
+  //       // res.status(500).json({ message: "failed to rest every project" });
+  //     });
+  // };
+  reset();
+});
 
 // cron.schedule("* * * * *", () => {
 //   reset();
