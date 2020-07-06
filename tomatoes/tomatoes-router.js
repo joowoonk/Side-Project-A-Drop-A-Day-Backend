@@ -124,7 +124,7 @@ const reset = () => {
       // res.status(500).json({ message: "failed to rest every project" });
     });
 };
-cron.schedule("* * * * *", () => {
+cron.schedule("0 0 * * *", () => {
   // const reset = () => {
   //   db("projects")
   //     .update("finished", 0)
