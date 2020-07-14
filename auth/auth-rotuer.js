@@ -7,6 +7,7 @@ const db = require("../database/dbConfig");
 const Users = require("./auth-model");
 const { isValid } = require("./auth-service");
 
+//fetch all user infos
 router.get("/user", (req, res) => {
   // const { id } = req.params;
   db("users")
@@ -23,6 +24,7 @@ router.get("/user", (req, res) => {
     });
 });
 
+//fetch user info by id
 router.get("/:id/user", (req, res) => {
   const { id } = req.params;
   db("users")
@@ -40,6 +42,7 @@ router.get("/:id/user", (req, res) => {
     });
 });
 
+//sign up endpoint
 router.post("/register", (req, res) => {
   const credentials = req.body;
 
@@ -66,6 +69,7 @@ router.post("/register", (req, res) => {
   }
 });
 
+//login endpoint
 router.post("/login", userValidation, (req, res) => {
   const { username, password } = req.body;
   db("users")

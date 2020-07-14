@@ -7,6 +7,7 @@ var cron = require("node-cron");
 
 // const router = require("express").Router();
 
+//fetching all the projects
 router.get("/", (req, res) => {
   db("projects")
     .orderBy("projects.id")
@@ -18,6 +19,8 @@ router.get("/", (req, res) => {
       res.status({ message: "Error retrieving projects" });
     });
 });
+
+//fetch project by id with user_id
 router.get("/:id", (req, res) => {
   const { id } = req.params;
 
@@ -41,6 +44,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
+// adding tomato once finished, using UPDATE endpoint
 router.put("/project/:id", (req, res) => {
   const { id } = req.params;
   findProject(id)
@@ -57,6 +61,8 @@ router.put("/project/:id", (req, res) => {
       res.status(500).json({ message: "Failed to retrieve" });
     });
 });
+
+//deleting a project
 router.delete("/project/:id", (req, res) => {
   const { id } = req.params;
   console.log(id);
@@ -78,6 +84,7 @@ router.delete("/project/:id", (req, res) => {
     });
 });
 
+//reseting project by project_id
 router.put("/reset/:id", (req, res) => {
   const { id } = req.params;
   findProjectId({ id })
@@ -95,6 +102,7 @@ router.put("/reset/:id", (req, res) => {
     });
 });
 
+//adding project
 router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   // const { id } = req.params;
@@ -106,7 +114,9 @@ router.post("/project/", (req, res) => {
           res.status(201).json(bodyproject);
         });
       } else {
-        res.status(404).json({ message: "Could not find topic with given id" });
+        res
+          .status(404)
+          .json({ message: "Could not find project with given id" });
       }
     })
     .catch((err) => {
@@ -114,6 +124,7 @@ router.post("/project/", (req, res) => {
     });
 });
 
+//reseting all the projects
 const reset = () => {
   db("projects")
     .update("finished", 0)
@@ -124,6 +135,8 @@ const reset = () => {
       // res.status(500).json({ message: "failed to rest every project" });
     });
 };
+
+//every midnight
 cron.schedule("0 0 * * *", () => {
   // const reset = () => {
   //   db("projects")
