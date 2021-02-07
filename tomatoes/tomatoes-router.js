@@ -106,7 +106,7 @@ router.put("/reset/:id", (req, res) => {
 router.post("/project/", (req, res) => {
   const bodyproject = req.body;
   // const { id } = req.params;
-
+// console.log("this is working")
   findById(bodyproject.user_id)
     .then((sub) => {
       if (sub) {
@@ -137,19 +137,19 @@ const reset = () => {
 };
 
 //every midnight
-cron.schedule("0 0 * * *", () => {
-  // const reset = () => {
-  //   db("projects")
-  //     .update("finished", 0)
-  //     .then((reset) => {
-  //       console.log("ALL THE FINISHED COUNTS ARE RESET!");
-  //     })
-  //     .catch((err) => {
-  //       // res.status(500).json({ message: "failed to rest every project" });
-  //     });
-  // };
-  reset();
-});
+// cron.schedule("0 0 * * *", () => {
+//   // const reset = () => {
+//   //   db("projects")
+//   //     .update("finished", 0)
+//   //     .then((reset) => {
+//   //       console.log("ALL THE FINISHED COUNTS ARE RESET!");
+//   //     })
+//   //     .catch((err) => {
+//   //       // res.status(500).json({ message: "failed to rest every project" });
+//   //     });
+//   // };
+//   reset();
+// });
 
 // cron.schedule("* * * * *", () => {
 //   reset();
