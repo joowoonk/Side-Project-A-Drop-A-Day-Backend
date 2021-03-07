@@ -87,6 +87,9 @@ module.exports = {
     migrations: {
       directory: "./database/migrations",
     },
+    ssl: {
+      rejectUnauthorized: false
+    },
     seeds: {
       directory: "./database/seeds",
     },
