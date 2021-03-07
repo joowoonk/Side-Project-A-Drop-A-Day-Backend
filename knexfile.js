@@ -79,7 +79,7 @@ module.exports = {
   },
   production: {
     client: "pg",
-    connection: process.env.DATABASE_URL + "?sslmode=require",
+    connection: process.env.DATABASE_URL + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory",
     pool: {
       min: 2,
       max: 10,
