@@ -35,7 +35,7 @@ require("dotenv").config();
 //       directory: "./database/seeds",
 //     },
 //   },
-// };
+// }; + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
 
 const pgConnection =
   process.env.DATABASE_URL || "postgresql://postgres@localhost/auth";
@@ -79,7 +79,10 @@ module.exports = {
   },
   production: {
     client: "pg",
-    connection: process.env.DATABASE_URL + "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory",
+    connection: {connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    },},
     pool: {
       min: 2,
       max: 10,
@@ -87,9 +90,7 @@ module.exports = {
     migrations: {
       directory: "./database/migrations",
     },
-    ssl: {
-      rejectUnauthorized: false
-    },
+
     seeds: {
       directory: "./database/seeds",
     },
